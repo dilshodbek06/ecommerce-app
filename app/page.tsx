@@ -1,6 +1,7 @@
 "use client";
 
 import Banner from "./_components/banner";
+import Benefits from "./_components/benefits";
 import CategoriesCircle from "./_components/categories-circle";
 import Header from "./_components/header";
 
@@ -14,10 +15,13 @@ export default function HomePage() {
         <Banner />
       </div>
       {/* Categories */}
-      <div>
+      <div className="mt-10">
         <CategoriesCircle />
       </div>
       {/* Benefits */}
+      <div className="mt-10">
+        <Benefits />
+      </div>
       {/* New products */}
       {/* NewsLetter */}
       {/* Footer */}
