@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ShoppingBag } from "lucide-react";
+import { Heart, ShoppingBag } from "lucide-react";
 import Logo from "./logo";
 import SearchForm from "./search-form";
 
@@ -16,7 +16,7 @@ const Header = () => {
         <div className="flex gap-2 items-center">
           <Button>cart (0)</Button>
           <Button variant={"outline"}>
-            <ShoppingBag className="w-4 h-4" />
+            <Heart className="w-4 h-4" />
           </Button>
         </div>
       </div>
