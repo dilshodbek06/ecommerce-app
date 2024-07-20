@@ -6,7 +6,7 @@ import SearchForm from "./search-form";
 const Header = () => {
   return (
     <div className="h-[80px] shadow-lg flex items-center">
-      <div className="container max-w-6xl flex justify-between items-center">
+      <div className="container max-w-6xl px-3 sm:px-8 flex justify-between items-center">
         <div>
           <Logo />
         </div>

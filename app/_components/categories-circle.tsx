@@ -9,7 +9,7 @@ const CategoriesCircle = () => {
   ];
 
   return (
-    <div className="max-w-6xl container gap-4 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-3">
+    <div className="max-w-6xl container px-3 sm:px-8 gap-4 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-3">
       {categories.map((category, ind) => (
         <CategoryCircleItem
           key={ind}

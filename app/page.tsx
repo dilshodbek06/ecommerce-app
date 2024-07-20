@@ -1,9 +1,9 @@
-"use client";
-
 import Banner from "./_components/banner";
 import Benefits from "./_components/benefits";
 import CategoriesCircle from "./_components/categories-circle";
+import Footer from "./_components/footer";
 import Header from "./_components/header";
+import NewProducts from "./_components/new-products";
 
 export default function HomePage() {
   return (
@@ -23,8 +23,14 @@ export default function HomePage() {
         <Benefits />
       </div>
       {/* New products */}
-      {/* NewsLetter */}
+      <div className="mt-5">
+        <NewProducts />
+      </div>
       {/* Footer */}
+      <hr className="my-4"/>
+      <div className="mt-10">
+        <Footer />
+      </div>
     </div>
   );
 }
