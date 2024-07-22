@@ -21,14 +21,12 @@ export function Breadcrumbs({ items }: { items: BreadcrumbItemProps[] }) {
         {items.map((item, index) => (
           <Fragment key={item.title}>
             {index !== items.length - 1 && (
-              <BreadcrumbItem>
+              <BreadcrumbItem className="text-teal-800">
                 <BreadcrumbLink href={item.link}>{item.title}</BreadcrumbLink>
               </BreadcrumbItem>
             )}
             {index < items.length - 1 && (
-              <BreadcrumbSeparator>
-                /
-              </BreadcrumbSeparator>
+              <BreadcrumbSeparator>/</BreadcrumbSeparator>
             )}
             {index === items.length - 1 && (
               <BreadcrumbPage>{item.title}</BreadcrumbPage>

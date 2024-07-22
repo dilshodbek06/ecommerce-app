@@ -3,6 +3,7 @@ import { columns } from "./columns";
 import { DataTable } from "./data-table";
 import { Category } from "@/models/Category";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 async function getData(): Promise<Category[]> {
   // Fetch data from your API here.
@@ -30,7 +31,9 @@ const CategoriesPage = async () => {
       <div className="flex-1 space-y-4  p-4 pt-6 md:p-8">
         <div className="flex justify-between items-center">
           <Breadcrumbs items={breadcrumbItems} />
-          <Button>+ create</Button>
+          <Link href={`/admin/categories/create`}>
+            <Button>+ Add New</Button>
+          </Link>
         </div>
         <DataTable columns={columns} data={data} />
       </div>
