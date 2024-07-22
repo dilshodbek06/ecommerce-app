@@ -14,14 +14,6 @@ const CategoryCreatePage = () => {
       <div className="flex-1 space-y-4 p-5">
         <Breadcrumbs items={breadcrumbItems} />
         <CategoriesForm />
-        {/* <ProductForm
-          categories={[
-            { _id: "shirts", name: "shirts" },
-            { _id: "pants", name: "pants" },
-          ]}
-          initialData={null}
-          key={null}
-        /> */}
       </div>
     </ScrollArea>
   );

@@ -1,11 +1,10 @@
 "use client";
 import * as z from "zod";
-import { useState } from "react";
-
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 
 import { useForm } from "react-hook-form";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -51,10 +50,12 @@ const CategoriesForm = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       console.log(values);
+      const res = await axios.post(`/api/category`, values);
+      console.log(res.data);
 
-      // await axios.patch(`/api/courses/${courseId}`, values);
       toast.success("Category created");
       router.refresh();
+      router.push("/admin/categories")
     } catch (error) {
       toast.error("Something went wrong");
     }

@@ -20,7 +20,10 @@ import Link from "next/link";
 export const columns: ColumnDef<Category>[] = [
   {
     accessorKey: "id",
-    header: "Index",
+    header: "№",
+    cell: ({ row }) => {
+      return <div>{row.index + 1}</div>;
+    },
   },
   {
     accessorKey: "title",

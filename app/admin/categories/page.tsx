@@ -1,22 +1,10 @@
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
-import { Category } from "@/models/Category";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
-async function getData(): Promise<Category[]> {
-  // Fetch data from your API here.
-  return [
-    {
-      id: "1",
-      title: "Category 1",
-      description: "lorem nimadir",
-      imageUrl: "m@example.com",
-      isPublished: true,
-    },
-  ];
-}
+import { Category } from "@/models/Category";
+import { getDBConnection } from "@/app/database/connection";
 
 const CategoriesPage = async () => {
   const breadcrumbItems = [
@@ -24,7 +12,15 @@ const CategoriesPage = async () => {
     { title: "Categories", link: "/admin/categories" },
   ];
 
-  const data = await getData();
+  const connection = await getDBConnection();
+  const response = await connection.getRepository(Category).find();
+  const data = response.map((category) => ({
+    id: category.id,
+    title: category.title,
+    imageUrl: category.imageUrl,
+    isPublished: category.isPublished,
+    description: category.description,
+  }));
 
   return (
     <>
