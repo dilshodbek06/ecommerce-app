@@ -6,14 +6,13 @@ import { Category } from "@/models/Category";
 
 const pgConnection = new DataSource({
   type: "postgres",
-  host: "localhost",
-  port: 5433,
+  url: process.env.DATABASE_URL,
   database: "ormdb",
   username: "postgres",
   password: "dilshod777",
   synchronize: true,
   logging: true,
-  entities: [User,Category],
+  entities: [User, Category],
   migrations: [],
   subscribers: [],
 });
