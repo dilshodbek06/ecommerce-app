@@ -1,4 +1,4 @@
-// FILE: @/app/database/connection.ts
+
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { User } from "@/models/User";
