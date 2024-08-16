@@ -3,24 +3,12 @@ import { columns } from "./columns";
 import { DataTable } from "./data-table";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Category } from "@/models/Category";
-import { getDBConnection } from "@/app/database/connection";
 
 const CategoriesPage = async () => {
   const breadcrumbItems = [
     { title: "Dashboard", link: "/admin" },
     { title: "Categories", link: "/admin/categories" },
   ];
-
-  const connection = await getDBConnection();
-  const response = await connection.getRepository(Category).find();
-  const data = response.map((category) => ({
-    id: category.id,
-    title: category.title,
-    imageUrl: category.imageUrl,
-    isPublished: category.isPublished,
-    description: category.description,
-  }));
 
   return (
     <>
@@ -31,7 +19,7 @@ const CategoriesPage = async () => {
             <Button>+ Add New</Button>
           </Link>
         </div>
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={[]} />
       </div>
     </>
   );

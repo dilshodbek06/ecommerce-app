@@ -1,25 +1,20 @@
-import { getDBConnection } from "@/app/database/connection";
-import { Category } from "@/models/Category";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { sql } from "@vercel/postgres";
 
 export async function POST(req: Request) {
   try {
-    const data = await req.json();
+    const { imageUrl, title, description, isPublished } = await req.json();
+
     const { userId } = auth();
     if (!userId) {
       return new NextResponse("Unathorized", { status: 401 });
     }
-
-    const connection = await getDBConnection();
-    const newCategory = new Category();
-    newCategory.title = data.title;
-    newCategory.imageUrl = data.imageUrl;
-    newCategory.isPublished = data.isPublished;
-    newCategory.description = data.description;
-
-    const response = await connection.getRepository(Category).save(newCategory);
-    return NextResponse.json(response);
+    const result =
+      await sql`INSERT INTO Category (title, imageUrl, description, isPublished)
+VALUES ('${title}', '${imageUrl}', '${description}', ${isPublished});
+`;
+    return NextResponse.json({ result });
   } catch (error) {
     console.log("[CREATE_CATEGORY]", error);
     return new NextResponse("Internal Error", { status: 500 });
@@ -33,10 +28,7 @@ export async function GET(req: Request) {
       return new NextResponse("Unathorized", { status: 401 });
     }
 
-    const connection = await getDBConnection();
-
-    const response = await connection.getRepository(Category).find();
-    return NextResponse.json(response);
+    return NextResponse.json({});
   } catch (error) {
     console.log("[CREATE_CATEGORY]", error);
     return new NextResponse("Internal Error", { status: 500 });
