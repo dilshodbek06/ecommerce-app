@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { Category } from "@prisma/client";
+import { Product } from "@prisma/client";
 
 import { ColumnDef } from "@tanstack/react-table";
 import axios from "axios";
@@ -17,7 +17,7 @@ import { ArrowUpDown, Eye, MoreHorizontal, Pencil, Trash } from "lucide-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 
-export const columns: ColumnDef<Category>[] = [
+export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: "id",
     header: "№",
@@ -32,6 +32,18 @@ export const columns: ColumnDef<Category>[] = [
   {
     accessorKey: "description",
     header: "Description",
+  },
+  {
+    accessorKey: "Category.title",
+    header: "Category",
+  },
+  {
+    accessorKey: "price",
+    header: "Price",
+    cell: ({ row }) => {
+      const price: number = row.getValue("price");
+      return <div>{price.toLocaleString()} UZS</div>;
+    },
   },
   {
     accessorKey: "isPublished",
@@ -66,8 +78,8 @@ export const columns: ColumnDef<Category>[] = [
       const { id } = row.original;
       const handleDelete = async () => {
         try {
-          await axios.delete(`/api/category/${id}`);
-          toast.success("Category deleted");
+          await axios.delete(`/api/product/${id}`);
+          toast.success("Product deleted");
           window.location.reload();
         } catch (error) {
           toast.error("Something went wrong.");
@@ -84,12 +96,12 @@ export const columns: ColumnDef<Category>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <Link href={`/admin/categories/${id}`}>
+            <Link href={`/admin/products/${id}`}>
               <DropdownMenuItem>
                 <Eye className="h-4 w-4 mr-2" /> View
               </DropdownMenuItem>
             </Link>
-            <Link href={`/admin/categories/${id}/update`}>
+            <Link href={`/admin/products/${id}/update`}>
               <DropdownMenuItem>
                 <Pencil className="h-4 w-4 mr-2" /> Edit
               </DropdownMenuItem>

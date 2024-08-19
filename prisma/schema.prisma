@@ -22,4 +22,21 @@ model Category {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  products Product[]
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  price       Float
+  imagesUrl   String[]
+  isPublished Boolean  @default(false)
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  
+  Category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String?
 }

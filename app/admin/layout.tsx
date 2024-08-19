@@ -7,7 +7,7 @@ export default function AdminLayout({
 }) {
   return (
     <div className="h-full">
-      <div className="h-[80px] border-b shadow-sm md:pl-60 fixed inset-y-0 w-full bg-white">
+      <div className="h-[80px] z-10 border-b shadow-sm md:pl-60 fixed inset-y-0 w-full bg-white">
         {/* <AdminNavbar /> */}
       </div>
       <div className="hidden md:flex  bg-white h-full w-60 flex-col fixed inset-y-0 z-50">

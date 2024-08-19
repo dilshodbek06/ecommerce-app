@@ -6,7 +6,6 @@ const breadcrumbItems = [
   { title: "Dashboard", link: "/admin" },
   { title: "Categories", link: "/admin/categories" },
   { title: "Create", link: "/admin/categories/create" },
-  // { title: "Update", link: "/admin/categories/:id/update" },
 ];
 
 const CategoryCreatePage = () => {

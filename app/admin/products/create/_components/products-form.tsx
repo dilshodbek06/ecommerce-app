@@ -16,6 +16,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
 import toast from "react-hot-toast";
@@ -23,23 +30,28 @@ import { Checkbox } from "@/components/ui/checkbox";
 import FileUpload from "./file-upload";
 import { useState } from "react";
 import { LoaderCircle } from "lucide-react";
+import { Category } from "@prisma/client";
 
-interface CategoriesFormProps {
+interface ProductsFormProps {
   initialData: {
     title: string;
     description: string;
-    imageUrl: string;
+    imagesUrl: string[];
     isPublished: boolean;
+    price: number;
+    categoryId: string;
   };
   isEdit: boolean;
-  categoryId?: string;
+  productId?: string;
+  categories?: Category[];
 }
 
-const CategoriesForm = ({
+const ProductsForm = ({
   initialData,
   isEdit,
-  categoryId,
-}: CategoriesFormProps) => {
+  productId,
+  categories,
+}: ProductsFormProps) => {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
@@ -51,8 +63,12 @@ const CategoriesForm = ({
     description: z.string().min(5, {
       message: "Description is required",
     }),
-    imageUrl: z.string().min(2, {
-      message: "Image required.",
+    categoryId: z.string().min(5, {
+      message: "Category is required",
+    }),
+    price: z.coerce.number({ message: "Price is required." }),
+    imagesUrl: z.array(z.string()).min(1, {
+      message: "At least one image is required.",
     }),
     isPublished: z.boolean().default(false),
   });
@@ -64,13 +80,15 @@ const CategoriesForm = ({
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log(values);
+
     try {
       setLoading(true);
       isEdit
-        ? await axios.put(`/api/category/${categoryId}`, values)
-        : await axios.post(`/api/category`, values);
-      toast.success(`Category ${isEdit ? "updated" : "created"}`);
-      router.push("/admin/categories");
+        ? await axios.put(`/api/product/${productId}`, values)
+        : await axios.post(`/api/product`, values);
+      toast.success(`Product ${isEdit ? "updated" : "created"}`);
+      router.push("/admin/products");
       router.refresh();
     } catch (error) {
       toast.error("Something went wrong");
@@ -78,26 +96,29 @@ const CategoriesForm = ({
       setLoading(false);
     }
   };
-
-  async function handleRemove() {
-    if (!form.getValues("imageUrl")) return;
+  const handleRemove = async (x: number) => {
+    const images = form.getValues("imagesUrl");
+    if (!images || !Array.isArray(images)) return;
 
     try {
-      // const imageUrl = form.getValues("imageUrl");
-      form.setValue("imageUrl", ""); // Clear the image URL from the form
+      // Remove the image at index 'x'
+      const updatedImages = images.filter((_, index) => index !== x);
+
+      // Update the form value with the new array
+      form.setValue("imagesUrl", updatedImages);
+
       toast.success("Image removed successfully.");
     } catch (error) {
       toast.error("Failed to remove image.");
       console.log(error);
     }
-  }
-
+  };
   return (
     <>
       <div className="flex items-center justify-between">
         <Heading
-          title={`Category  ${isEdit ? "Update" : "Create"}`}
-          description={""}
+          title={`Product  ${isEdit ? "Update" : "Create"}`}
+          description=""
         />
       </div>
       <Separator />
@@ -108,15 +129,15 @@ const CategoriesForm = ({
         >
           <FormField
             control={form.control}
-            name="imageUrl"
+            name="imagesUrl"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Image</FormLabel>
+                <FormLabel>Images</FormLabel>
                 <FormControl>
                   <FileUpload
                     onChange={field.onChange}
-                    value={field.value}
-                    onRemove={() => handleRemove()}
+                    values={field.value}
+                    onRemove={handleRemove}
                   />
                 </FormControl>
                 <FormMessage />
@@ -131,7 +152,7 @@ const CategoriesForm = ({
                 <FormItem>
                   <FormLabel>Title</FormLabel>
                   <FormControl>
-                    <Input placeholder="Category title" {...field} />
+                    <Input placeholder="Product title" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -143,9 +164,59 @@ const CategoriesForm = ({
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="mt-2">Description</FormLabel>
+                    <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Input placeholder="Category description" {...field} />
+                      <Input placeholder="Product description" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="mt-2">
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Price</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="Product price"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="mt-2">
+              <FormField
+                control={form.control}
+                name="categoryId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Price</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger className="w-full sm:w-[180px]">
+                          <SelectValue placeholder="Select Category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {categories?.map((category) => (
+                            <SelectItem key={category.id} value={category.id}>
+                              {category.title}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -183,11 +254,7 @@ const CategoriesForm = ({
               />
             </div>
           </div>
-          <Button
-            className="ml-auto w-full sm:w-auto"
-            type="submit"
-            disabled={loading}
-          >
+          <Button className="ml-auto w-full sm:w-auto" type="submit" disabled={loading}>
             {loading && <LoaderCircle className="w-4 h-4 mr-2 animate-spin" />}
             {isEdit ? "Update" : "Save"}
           </Button>
@@ -197,4 +264,4 @@ const CategoriesForm = ({
   );
 };
 
-export default CategoriesForm;
+export default ProductsForm;
