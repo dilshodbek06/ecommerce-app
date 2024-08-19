@@ -1,4 +1,5 @@
 "use client";
+
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
@@ -20,9 +21,28 @@ import { Heading } from "@/components/ui/heading";
 import toast from "react-hot-toast";
 import { Checkbox } from "@/components/ui/checkbox";
 import FileUpload from "./file-upload";
+import { useState } from "react";
+import { LoaderCircle } from "lucide-react";
 
-const CategoriesForm = () => {
+interface CategoriesFormProps {
+  initialData: {
+    title: string;
+    description: string;
+    imageUrl: string;
+    isPublished: boolean;
+  };
+  isEdit: boolean;
+  categoryId?: string;
+}
+
+const CategoriesForm = ({
+  initialData,
+  isEdit,
+  categoryId,
+}: CategoriesFormProps) => {
   const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
 
   const formSchema = z.object({
     title: z.string().min(2, {
@@ -39,38 +59,46 @@ const CategoriesForm = () => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      imageUrl: "",
-      isPublished: false,
-    },
+    defaultValues: initialData,
+    shouldFocusError: true,
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      console.log(values);
-      const res = await axios.post(`/api/category`, values);
-      console.log(res.data);
-
-      toast.success("Category created");
+      setLoading(true);
+      isEdit
+        ? await axios.put(`/api/category/${categoryId}`, values)
+        : await axios.post(`/api/category`, values);
+      toast.success(`Category ${isEdit ? "updated" : "created"}`);
+      router.push("/admin/categories");
       router.refresh();
-      router.push("/admin/categories")
     } catch (error) {
       toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
+  async function handleRemove() {
+    if (!form.getValues("imageUrl")) return;
+
+    try {
+      // const imageUrl = form.getValues("imageUrl");
+      form.setValue("imageUrl", ""); // Clear the image URL from the form
+      toast.success("Image removed successfully.");
+    } catch (error) {
+      toast.error("Failed to remove image.");
+      console.log(error);
+    }
+  }
+
   return (
     <>
-      {/* <AlertModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        onConfirm={onDelete}
-        loading={loading}
-      /> */}
       <div className="flex items-center justify-between">
-        <Heading title={"Category create"} description={""} />
+        <Heading
+          title={`Category  ${isEdit ? "Update" : "Create"}`}
+          description={""}
+        />
       </div>
       <Separator />
       <Form {...form}>
@@ -88,7 +116,7 @@ const CategoriesForm = () => {
                   <FileUpload
                     onChange={field.onChange}
                     value={field.value}
-                    onRemove={field.onChange}
+                    onRemove={() => handleRemove()}
                   />
                 </FormControl>
                 <FormMessage />
@@ -150,8 +178,9 @@ const CategoriesForm = () => {
               )}
             />
           </div>
-          <Button className="ml-auto" type="submit">
-            Save
+          <Button className="ml-auto" type="submit" disabled={loading}>
+            {loading && <LoaderCircle className="w-4 h-4 mr-2 animate-spin" />}
+            {isEdit ? "Update" : "Save"}
           </Button>
         </form>
       </Form>

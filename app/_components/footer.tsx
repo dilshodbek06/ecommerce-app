@@ -16,7 +16,7 @@ const Footer = () => {
                   height={100}
                 />
                 <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-                  ZD Commmerce
+                  ZD Shop
                 </span>
               </b>
             </div>

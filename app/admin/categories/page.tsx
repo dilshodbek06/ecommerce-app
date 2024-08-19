@@ -3,12 +3,17 @@ import { columns } from "./columns";
 import { DataTable } from "./data-table";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import prisma from "@/lib/db";
 
 const CategoriesPage = async () => {
   const breadcrumbItems = [
     { title: "Dashboard", link: "/admin" },
     { title: "Categories", link: "/admin/categories" },
   ];
+
+  const data = await prisma.category.findMany({
+    orderBy: [{ createdAt: "desc" }, { updatedAt: "desc" }],
+  });
 
   return (
     <>
@@ -19,7 +24,7 @@ const CategoriesPage = async () => {
             <Button>+ Add New</Button>
           </Link>
         </div>
-        <DataTable columns={columns} data={[]} />
+        <DataTable columns={columns} data={data} />
       </div>
     </>
   );

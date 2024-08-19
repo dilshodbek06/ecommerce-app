@@ -17,8 +17,15 @@ export default function FileUpload({
   return (
     <div className="min-h-32 flex items-center gap-x-2 justify-between flex-wrap ">
       {value ? (
-        <div>
+        <div className="relative">
           <Image src={value} alt={"image"} width={200} height={120} />
+          <button
+            type="button"
+            onClick={onRemove}
+            className="text-white w-6 h-6 flex justify-center items-center rounded-full bg-red-500 hover:bg-red-600 absolute -top-2 -right-2"
+          >
+            x
+          </button>
         </div>
       ) : (
         <div>

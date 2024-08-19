@@ -6,6 +6,7 @@ const breadcrumbItems = [
   { title: "Dashboard", link: "/admin" },
   { title: "Categories", link: "/admin/categories" },
   { title: "Create", link: "/admin/categories/create" },
+  // { title: "Update", link: "/admin/categories/:id/update" },
 ];
 
 const CategoryCreatePage = () => {
@@ -13,7 +14,15 @@ const CategoryCreatePage = () => {
     <ScrollArea className="h-full">
       <div className="flex-1 space-y-4 p-5">
         <Breadcrumbs items={breadcrumbItems} />
-        <CategoriesForm />
+        <CategoriesForm
+          initialData={{
+            title: "",
+            description: "",
+            imageUrl: "",
+            isPublished: false,
+          }}
+          isEdit={false}
+        />
       </div>
     </ScrollArea>
   );
