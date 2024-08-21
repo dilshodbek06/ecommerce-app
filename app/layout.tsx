@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Molengo } from "next/font/google";
 import "./globals.css";
 
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
@@ -10,7 +10,7 @@ import { extractRouterConfig } from "uploadthing/server";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ourFileRouter } from "./api/uploadthing/core";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Molengo({ weight: ["400"], subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Ecommerce app",

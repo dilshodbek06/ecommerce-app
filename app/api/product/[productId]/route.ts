@@ -53,3 +53,25 @@ export async function PUT(
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
+
+export async function GET(
+  req: Request,
+  { params }: { params: { productId: string } }
+) {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+    const result = await prisma.product.findFirst({
+      where: {
+        id: params.productId,
+      },
+    });
+
+    return NextResponse.json(result);
+  } catch (error) {
+    console.log("[GET_SINGLE_PRODUCT]", error);
+    return new NextResponse("Internal Error", { status: 500 });
+  }
+}

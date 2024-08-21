@@ -1,3 +1,4 @@
+import AdminFloatButton from "./_components/admin-float-button";
 import Banner from "./_components/banner";
 import Benefits from "./_components/benefits";
 import CategoriesCircle from "./_components/categories-circle";
@@ -27,7 +28,8 @@ export default function HomePage() {
         <NewProducts />
       </div>
       {/* Footer */}
-      <hr className="my-4"/>
+      <hr className="my-4" />
+      <AdminFloatButton />
       <div className="mt-10">
         <Footer />
       </div>

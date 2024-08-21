@@ -1,9 +1,10 @@
+import { Product } from "@prisma/client";
 import Image from "next/image";
 
 interface CategoryCircleItemProps {
   imageUrl: string;
   title: string;
-  products: any[];
+  products: Product[];
 }
 
 const CategoryCircleItem = ({
@@ -12,19 +13,21 @@ const CategoryCircleItem = ({
   title,
 }: CategoryCircleItemProps) => {
   return (
-    <div className="flex flex-col items-center gap-3">
-      <div className="cursor-pointer w-48 h-48 flex justify-center items-center rounded-full bg-gradient-to-r from-green-200 to-cyan-200 mx-auto">
+    <div className="rounded-xl max-h-64 shadow-md bg-white dark:bg-slate-800 border dark:border-none p-7 pb-4">
+      <div className="h-32 w-auto rounded-xl flex justify-center items-center">
         <Image
-          src={"/vercel.svg"}
-          alt="category image"
+          src={imageUrl}
+          alt="..."
+          className="max-h-full max-w-full w-auto"
           width={150}
-          height={150}
-          className="object-cover transition duration-300 hover:scale-105"
+          height={200}
         />
       </div>
-      <div>
-        <h3 className="font-bold">{title}</h3>
-        <h5 className="text-gray-500">{products.length + 10} products</h5>
+      <div className="p-4">
+        <h2 className="text-lg font-bold leading-none mt-2">{title}</h2>
+        <h5 className="text-gray-500">
+          {products.length} {products.length === 1 ? "product" : "products"}
+        </h5>
       </div>
     </div>
   );
